@@ -16,8 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
       const CameraPosition(target: LatLng(34.1035, 71.1598), zoom: 17);
 
   List<Marker> _marker = [];
-  List<Marker> _list = [
-    Marker(
+  final List<Marker> _list = [
+    const Marker(
         markerId: MarkerId('1'),
         position: LatLng(34.1035, 71.1598),
         infoWindow: InfoWindow(title: 'Mudakir College'))
@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _marker.addAll(_list);
   }
@@ -33,19 +32,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: const Text('Google map'),
-        ),
         body: GoogleMap(
           initialCameraPosition: kGoogleMap,
-          myLocationEnabled: true,
           markers: Set<Marker>.of(_marker),
-          compassEnabled: true,
           mapType: MapType.hybrid,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            GoogleMapController controller = await _controller.future;
+            controller.animateCamera(CameraUpdate.newCameraPosition(
+                const CameraPosition(
+                    target: LatLng(34.0706, 71.2176), zoom: 15)));
+            setState(() {});
+          },
+          child: const Icon(Icons.location_on),
         ));
   }
 }
