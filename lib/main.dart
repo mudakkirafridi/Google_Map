@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:map_toturial/screens/home_screen.dart';
+import 'package:map_toturial/screens/conver_cordinates_address.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: const LatLngConToAdress(),
     );
   }
 }
