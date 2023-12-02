@@ -22,13 +22,21 @@ class _LatLngConToAdressState extends State<LatLngConToAdress> {
           Text(myAdress),
           ElevatedButton(
               onPressed: () async {
-                final cordinate = Coordinates(34.0706, 71.2176);
-                var address = await Geocoder.local
-                    .findAddressesFromCoordinates(cordinate);
+                final query = 'wali khel';
+                var address =
+                    await Geocoder.local.findAddressesFromQuery(query);
                 var first = address.first;
                 setState(() {
-                  myAdress = first.addressLine.toString();
+                  myAdress = first.coordinates.toString();
                 });
+                //============================================
+                // final cordinate = Coordinates(34.0706, 71.2176);
+                // var address = await Geocoder.local
+                //     .findAddressesFromCoordinates(cordinate);
+                // var first = address.first;
+                // setState(() {
+                //   myAdress = first.addressLine.toString();
+                // });
               },
               child: const Text('Convert'))
         ],
