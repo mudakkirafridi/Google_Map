@@ -27,7 +27,7 @@ class _LatLngConToAdressState extends State<LatLngConToAdress> {
                     .findAddressesFromCoordinates(cordinate);
                 var first = address.first;
                 setState(() {
-                  myAdress = first.featureName.toString();
+                  myAdress = first.addressLine.toString();
                 });
               },
               child: const Text('Convert'))
