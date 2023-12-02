@@ -12,6 +12,7 @@ class CurrentLocation extends StatefulWidget {
 }
 
 class _CurrentLocationState extends State<CurrentLocation> {
+  final textController = TextEditingController();
   final Completer<GoogleMapController> _controller = Completer();
   static const CameraPosition cameraPosition =
       CameraPosition(target: LatLng(34.1035, 71.1598), zoom: 17);
@@ -60,7 +61,21 @@ class _CurrentLocationState extends State<CurrentLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Map tutorial'),
+        backgroundColor: Colors.blue,
+        title: Container(
+          decoration: BoxDecoration(
+              border: Border.all(), borderRadius: BorderRadius.circular(15)),
+          child: TextField(
+            controller: textController,
+            decoration: const InputDecoration(
+              fillColor: Colors.transparent,
+              filled: true,
+              hintText: 'Search Your Place',
+              hintStyle: TextStyle(color: Colors.white),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
       ),
       body: GoogleMap(
         mapType: MapType.hybrid,
