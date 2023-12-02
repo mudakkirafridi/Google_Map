@@ -13,14 +13,14 @@ class CurrentLocation extends StatefulWidget {
 
 class _CurrentLocationState extends State<CurrentLocation> {
   final Completer<GoogleMapController> _controller = Completer();
-  static final CameraPosition cameraPosition =
-      CameraPosition(target: LatLng(34.71, 46.67), zoom: 14);
+  static const CameraPosition cameraPosition =
+      CameraPosition(target: LatLng(34.1035, 71.1598), zoom: 17);
 
   List<Marker> _list = [];
   List<Marker> myMarker = [
     const Marker(
         markerId: MarkerId('1'),
-        position: LatLng(34.71, 46.67),
+        position: LatLng(34.1035, 71.1598),
         infoWindow: InfoWindow(title: 'My Location'))
   ];
 
@@ -28,7 +28,6 @@ class _CurrentLocationState extends State<CurrentLocation> {
   void initState() {
     super.initState();
     _list.addAll(myMarker);
-    loadData();
   }
 
   loadData() {
@@ -39,7 +38,7 @@ class _CurrentLocationState extends State<CurrentLocation> {
           infoWindow: const InfoWindow(title: 'my location')));
 
       CameraPosition targetPosition = CameraPosition(
-          target: LatLng(value.latitude, value.longitude), zoom: 14);
+          target: LatLng(value.latitude, value.longitude), zoom: 17);
       final GoogleMapController controller = await _controller.future;
 
       controller.animateCamera(CameraUpdate.newCameraPosition(targetPosition));
@@ -64,11 +63,17 @@ class _CurrentLocationState extends State<CurrentLocation> {
         title: const Text('Map tutorial'),
       ),
       body: GoogleMap(
+        mapType: MapType.hybrid,
         initialCameraPosition: cameraPosition,
         markers: Set<Marker>.of(_list),
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          loadData();
+        },
         child: const Icon(Icons.my_location_outlined),
       ),
     );
