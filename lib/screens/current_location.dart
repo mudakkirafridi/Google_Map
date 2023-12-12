@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_toturial/screens/search_screen.dart';
 
 class CurrentLocation extends StatefulWidget {
   const CurrentLocation({super.key});
@@ -51,7 +51,6 @@ class _CurrentLocationState extends State<CurrentLocation> {
     await Geolocator.requestPermission()
         .then((value) {})
         .onError((error, stackTrace) async {
-      await Geolocator.requestPermission();
       print(error.toString());
     });
     return await Geolocator.getCurrentPosition();
@@ -62,20 +61,27 @@ class _CurrentLocationState extends State<CurrentLocation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Container(
-          decoration: BoxDecoration(
-              border: Border.all(), borderRadius: BorderRadius.circular(15)),
-          child: TextField(
-            controller: textController,
-            decoration: const InputDecoration(
-              fillColor: Colors.transparent,
-              filled: true,
-              hintText: 'Search Your Place',
-              hintStyle: TextStyle(color: Colors.white),
-              border: InputBorder.none,
-            ),
-          ),
+        title: const Text(
+          'Google Map',
+          style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchScreen()));
+              },
+              child: const Icon(
+                Icons.search,
+                color: Colors.white,
+                size: 30,
+              )),
+          const SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: GoogleMap(
         mapType: MapType.hybrid,
