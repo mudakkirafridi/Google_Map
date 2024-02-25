@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:map_toturial/screens/current_location.dart';
+import 'package:map_toturial/screens/custom_info_window.dart';
 import 'package:map_toturial/screens/cutom_marker_screen.dart';
+import 'package:map_toturial/screens/example.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
             elevation: 9,
           )),
       debugShowCheckedModeBanner: false,
-      home: const CustomMarkerScreen(),
+      home: MyInfoWindow(),
     );
   }
 }

@@ -42,6 +42,8 @@ dependencies:
   http: ^1.1.2
   uuid: ^4.0.0
   geocoding: ^2.1.1
+  custom_info_window: ^1.0.1
+  clippy_flutter:
 
 
 flutter_icons:
@@ -77,6 +79,9 @@ flutter:
   assets:
     - assets/icon/
     - assets/images/
+    - assets/googlemap_styling.json
+    - assets/googlemap_retro.json
+    - assets/googlemap_silver.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

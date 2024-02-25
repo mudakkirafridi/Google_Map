@@ -1,76 +1,90 @@
-import 'dart:async';
-
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import "dart:typed_data";
-import 'dart:ui' as ui;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class CustomMarkerScreen extends StatefulWidget {
-  const CustomMarkerScreen({super.key});
+class MyInfoWindow extends StatefulWidget {
+  const MyInfoWindow({super.key});
 
   @override
-  State<CustomMarkerScreen> createState() => _CustomMarkerScreenState();
+  State<MyInfoWindow> createState() => _CustomInfoWindowState();
 }
 
-class _CustomMarkerScreenState extends State<CustomMarkerScreen> {
-  Uint8List? markerImage;
-  Completer<GoogleMapController> googleMapContoller = Completer();
-  static const CameraPosition cameraPosition =
-      CameraPosition(target: LatLng(33.6941, 72.9734), zoom: 14);
-  List<String> images = [
-    "assets/images/car.png",
-    "assets/images/car1.png",
-    "assets/images/car3.png",
-  ];
-  List<Marker> _markerList = [];
-  List<LatLng> latLngList = [
-    LatLng(33.6941, 72.9734),
-    LatLng(33.7008, 72.9682),
-    LatLng(33.6992, 72.9744)
+class _CustomInfoWindowState extends State<MyInfoWindow> {
+  CustomInfoWindowController _infoWindowController =
+      CustomInfoWindowController();
+
+  final List<Marker> _markerList = [];
+  final List<LatLng> marker = [
+    LatLng(33.6941, 729734),
+    LatLng(33.7808, 9682),
+    LatLng(33.6992, 9744),
+    LatLng(33.6939, 9771),
+    LatLng(33.6910, 9807),
+    LatLng(33.7036, 9785)
   ];
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    loadData();
+    load();
   }
 
-  loadData() async {
-    for (var index = 0; index < latLngList.length; index++) {
-      final Uint8List markerIcon = await getBytesFromAssets(images[index], 100);
+  load() {
+    for (int index = 0; index < marker.length; index++) {
       _markerList.add(Marker(
           markerId: MarkerId(index.toString()),
-          position: latLngList[index],
-          icon: BitmapDescriptor.fromBytes(markerIcon),
-          infoWindow:
-              InfoWindow(title: 'this is title marker ${index.toString()}')));
+          icon: BitmapDescriptor.defaultMarker,
+          position: marker[index],
+          onTap: () {
+            _infoWindowController.addInfoWindow!(
+                Container(
+                  height: 300,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: NetworkImage('')),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: Colors.grey)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 300,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: Colors.green)),
+                      )
+                    ],
+                  ),
+                ),
+                marker[index]);
+          }));
     }
-  }
-
-  Future<Uint8List> getBytesFromAssets(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetHeight: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Custom Marker"),
-      ),
-      body: GoogleMap(
-        initialCameraPosition: cameraPosition,
-        markers: Set.of(_markerList),
-        onMapCreated: (GoogleMapController controller) {
-          googleMapContoller.complete(controller);
-        },
-      ),
-    );
+        appBar: AppBar(title: const Text('Custom Info Window')),
+        body: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(33.6941, 729734)),
+              markers: Set<Marker>.of(_markerList),
+              onTap: (position) {
+                _infoWindowController.hideInfoWindow!();
+              },
+              onMapCreated: (GoogleMapController controller) {
+                _infoWindowController.googleMapController = controller;
+              },
+            ),
+            CustomInfoWindow(controller: _infoWindowController)
+          ],
+        ));
   }
 }
